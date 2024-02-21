@@ -6,11 +6,17 @@ use std::net::TcpListener;
 //     format!("Hello {} !", &name)
 // }
 
+#[derive(serde::Deserialize)]
+struct FormData {
+    email: String,
+    name: String,
+}
+
 async fn health_check() -> HttpResponse {
     HttpResponse::Ok().finish()
 }
 
-async fn subscribe() -> HttpResponse {
+async fn subscribe(_form: web::Form<FormData>) -> HttpResponse {
     HttpResponse::Ok().finish()
 }
 
@@ -19,8 +25,8 @@ pub async fn run(listener: TcpListener) -> Result<Server, std::io::Error> {
         App::new()
             .route("/health_check", web::get().to(health_check))
             .route("/subscriptions", web::post().to(subscribe))
-            // .route("/", web::get().to(greet))
-            // .route("/{name}", web::get().to(greet))
+        // .route("/", web::get().to(greet))
+        // .route("/{name}", web::get().to(greet))
     })
     .listen(listener)?
     // .bind(address)?
